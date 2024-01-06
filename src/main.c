@@ -1,3 +1,6 @@
+#include "parse.h"
+#include "puzzle.h"
+
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -74,6 +77,16 @@ cli_args_t parse_args(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
     const cli_args_t args = parse_args(argc, argv);
+
+    puzzle_t puzzle = {0};
+    if (false == parse_puzzle(args.puzzle, &puzzle))
+    {
+        fprintf(stderr, "Failed to parse puzzle from %s\n", args.puzzle);
+        exit(EXIT_FAILURE);
+    }
+
+    // TODO: Solve the puzzle
+    fprint_puzzle(stdout, puzzle);
 
     return 0;
 }
