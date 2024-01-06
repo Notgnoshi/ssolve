@@ -14,6 +14,7 @@ Makefile.in
 .dirstamp
 *.log
 *.trs
+*.actual
 
 # http://www.gnu.org/software/autoconf
 

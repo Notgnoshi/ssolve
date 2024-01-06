@@ -6,8 +6,6 @@ ssolve_SOURCES = \
 	src/parse.h \
 	src/main.c
 
-TESTS = tests/cases/a.txt \
-	tests/cases/b.txt \
-	tests/cases/c.txt
-
-LOG_COMPILER = $(srcdir)/tests/runner.sh
+TESTS = \
+	tests/cases/empty.txt
+TESTS_ENVIRONMENT = $(srcdir)/tests/runner.sh

@@ -14,7 +14,11 @@ void fprint_puzzle(FILE* file, puzzle_t puzzle)
             {
                 fprintf(file, "| ");
             }
-            fprintf(file, "%u ", puzzle[row][col]);
+            fprintf(file, "%u", puzzle[row][col]);
+            if (col != SSOLVE_GRID_SIZE - 1)
+            {
+                fprintf(file, " ");
+            }
             if (col == SSOLVE_GRID_SIZE - 1)
             {
                 fprintf(file, "\n");
