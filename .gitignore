@@ -12,6 +12,8 @@ Makefile.in
 /ylwrap
 .deps/
 .dirstamp
+*.log
+*.trs
 
 # http://www.gnu.org/software/autoconf
 
