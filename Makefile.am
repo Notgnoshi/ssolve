@@ -7,5 +7,9 @@ ssolve_SOURCES = \
 	src/main.c
 
 TESTS = \
-	tests/cases/empty.txt
+	tests/cases/empty.txt \
+	tests/cases/invalid-full.txt \
+	tests/cases/invalid-rows.txt \
+	tests/cases/incomplete-row1.txt \
+	tests/cases/incomplete-row2.txt
 TESTS_ENVIRONMENT = $(srcdir)/tests/runner.sh

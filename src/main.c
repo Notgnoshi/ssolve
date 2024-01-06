@@ -10,13 +10,14 @@ typedef struct cli_args_t
 {
     bool verbose;
     const char* puzzle;
-    // TODO: Add different input formats for the puzzle parsing?
 } cli_args_t;
 
 void usage(void)
 {
     printf("Solve sudoku puzzles\n");
     printf("Usage: ssolve [--help] [--verbose] <PUZZLE>\n");
+
+    // TODO: Add --check that checks a sudoku.txt file for rule violations
 }
 
 cli_args_t parse_args(int argc, char* argv[])
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
     const cli_args_t args = parse_args(argc, argv);
 
     puzzle_t puzzle = {0};
-    if (false == parse_puzzle(args.puzzle, &puzzle))
+    if (false == parse_puzzle(args.puzzle, puzzle))
     {
         fprintf(stderr, "Failed to parse puzzle from %s\n", args.puzzle);
         exit(EXIT_FAILURE);

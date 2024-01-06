@@ -11,7 +11,9 @@ fi
 EXPECTED_RESULTS_FILE="${INPUT_FILE%.*}.expected"
 ACTUAL_RESULTS_FILE="${INPUT_FILE%.*}.actual"
 
-./ssolve "$INPUT_FILE" >"$ACTUAL_RESULTS_FILE"
+if ! ./ssolve "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
+    echo "'ssolve $INPUT_FILE' exited with non-zero status" >&2
+fi
 
 ssolve_cdiff() {
     # Use delta, if it's installed, because it give better diffs

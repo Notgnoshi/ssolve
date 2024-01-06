@@ -4,4 +4,4 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-bool parse_puzzle(const char* filename, puzzle_t* puzzle);
+bool parse_puzzle(const char* filename, puzzle_t puzzle);
