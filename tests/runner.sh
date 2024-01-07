@@ -11,9 +11,18 @@ fi
 EXPECTED_RESULTS_FILE="${INPUT_FILE%.*}.expected"
 ACTUAL_RESULTS_FILE="${INPUT_FILE%.*}.actual"
 
-if ! ./ssolve "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
-    echo "'ssolve $INPUT_FILE' exited with non-zero status" >&2
-fi
+case "$INPUT_FILE" in
+*/check-*)
+    if ! ./ssolve --color never --check "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
+        echo "'solve --check $INPUT_FILE' exited with non-zero status" >&2
+    fi
+    ;;
+*)
+    if ! ./ssolve "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
+        echo "'ssolve $INPUT_FILE' exited with non-zero status" >&2
+    fi
+    ;;
+esac
 
 ssolve_cdiff() {
     # Use delta, if it's installed, because it give better diffs

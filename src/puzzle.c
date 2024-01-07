@@ -1,6 +1,6 @@
 #include "puzzle.h"
 
-void fprint_puzzle(FILE* file, puzzle_t puzzle)
+void fprint_puzzle(FILE* file, puzzle_t puzzle, puzzle_t color_hints, color_when_t when)
 {
     for (int row = 0; row < SSOLVE_GRID_SIZE; row++)
     {
