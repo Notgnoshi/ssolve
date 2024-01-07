@@ -158,8 +158,16 @@ int main(int argc, char* argv[])
     switch (args.op)
     {
     case SSOLVE_OP_SOLVE:
+    {
         // TODO: Solve the puzzle
+
+        // Check the newly solved puzzle to set the color hints
+        if (args.color == SSOLVE_COLOR_ALWAYS)
+        {
+            ssolve_check_puzzle(puzzle, color_hints);
+        }
         break;
+    }
     case SSOLVE_OP_CHECK:
     {
         const ssolve_check_result_t result = ssolve_check_puzzle(puzzle, color_hints);
