@@ -7,6 +7,8 @@ ssolve_SOURCES = \
 
 TESTS = \
 	tests/cases/check-empty.txt \
+	tests/cases/check-easy1.txt \
+	tests/cases/check-easy1-with-violation.txt \
 	tests/cases/empty.txt \
 	tests/cases/invalid-full.txt \
 	tests/cases/invalid-rows.txt \
