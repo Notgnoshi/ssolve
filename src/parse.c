@@ -70,15 +70,8 @@ bool parse_line(int* row, char* buffer, int buf_size, puzzle_t puzzle)
 //     6 0 0 | 0 0 0 | 0 0 0
 //     7 0 0 | 0 0 0 | 0 0 0
 //     8 0 0 | 0 0 0 | 0 0 0
-bool parse_puzzle(const char* filename, puzzle_t puzzle)
+bool parse_puzzle(FILE* file, puzzle_t puzzle)
 {
-    FILE* file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        perror("Failed to open file");
-        return false;
-    }
-
     int row = 0;
 
     const int buf_size = 255;
@@ -88,7 +81,6 @@ bool parse_puzzle(const char* filename, puzzle_t puzzle)
         if (NULL == fgets(buffer, buf_size, file))
         {
             fprintf(stderr, "Parsed %d rows before EOF\n", row);
-            fclose(file);
             return false;
         }
 
@@ -97,11 +89,9 @@ bool parse_puzzle(const char* filename, puzzle_t puzzle)
         {
             // Buffer contains a null byte, so you can't print anything after it
             fprintf(stderr, "Failed to parse line: %s", buffer);
-            fclose(file);
             return false;
         }
     }
 
-    fclose(file);
     return true;
 }

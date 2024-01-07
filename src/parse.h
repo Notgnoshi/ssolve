@@ -2,6 +2,6 @@
 #include "puzzle.h"
 
 #include <stdbool.h>
-#include <stdint.h>
+#include <stdio.h>
 
-bool parse_puzzle(const char* filename, puzzle_t puzzle);
+bool parse_puzzle(FILE* file, puzzle_t puzzle);
