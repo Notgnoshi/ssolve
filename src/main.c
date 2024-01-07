@@ -11,20 +11,20 @@
 
 bool ssolve_verbose_g = false;
 
-typedef enum operation_t
+typedef enum ssolve_operation_t
 {
     SSOLVE_OP_SOLVE = 0,  // default
     SSOLVE_OP_CHECK,
-} operation_t;
+} ssolve_operation_t;
 
-typedef struct cli_args_t
+typedef struct ssolve_cli_args_t
 {
-    operation_t op;
-    color_when_t color;
+    ssolve_operation_t op;
+    ssolve_color_when_t color;
     const char* puzzle;
-} cli_args_t;
+} ssolve_cli_args_t;
 
-void usage(void)
+void ssolve_usage(void)
 {
     printf("Solve sudoku puzzles\n");
     printf("Usage: ssolve [--help] [--verbose] [PUZZLE]\n");
@@ -41,9 +41,9 @@ void usage(void)
     // TODO: Add --generate?
 }
 
-cli_args_t parse_args(int argc, char* argv[])
+ssolve_cli_args_t ssolve_parse_args(int argc, char* argv[])
 {
-    cli_args_t args = {0};
+    ssolve_cli_args_t args = {0};
 
     struct option options[] = {
         {"help", no_argument, NULL, 'h'},
@@ -66,7 +66,7 @@ cli_args_t parse_args(int argc, char* argv[])
         switch (retval)
         {
         case 'h':
-            usage();
+            ssolve_usage();
             exit(EXIT_SUCCESS);
             break;
         case 'v':
@@ -126,7 +126,7 @@ cli_args_t parse_args(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-    const cli_args_t args = parse_args(argc, argv);
+    const ssolve_cli_args_t args = ssolve_parse_args(argc, argv);
     FILE* file = NULL;
     if (args.puzzle == NULL || (args.puzzle[0] == '-' && args.puzzle[1] == '\0'))
     {
@@ -141,9 +141,9 @@ int main(int argc, char* argv[])
         }
     }
 
-    puzzle_t puzzle = {0};
-    puzzle_t color_hints = {0};
-    if (false == parse_puzzle(file, puzzle))
+    ssolve_puzzle_t puzzle = {0};
+    ssolve_puzzle_t color_hints = {0};
+    if (false == ssolve_parse_puzzle(file, puzzle))
     {
         fprintf(stderr, "Failed to parse puzzle from %s\n", args.puzzle);
         exit(EXIT_FAILURE);
@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
     if (ssolve_verbose_g)
     {
         fprintf(stderr, "Parsed puzzle:\n");
-        fprint_puzzle(stderr, puzzle, color_hints, args.color);
+        ssolve_fprint_puzzle(stderr, puzzle, color_hints, args.color);
     }
 
     switch (args.op)
@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
         break;
     case SSOLVE_OP_CHECK:
     {
-        const check_result_t result = ssolve_check_puzzle(puzzle, color_hints);
+        const ssolve_check_result_t result = ssolve_check_puzzle(puzzle, color_hints);
         switch (result)
         {
         case SSOLVE_CHECK_UNSOLVED:
@@ -183,7 +183,7 @@ int main(int argc, char* argv[])
     }
 
     // Finally, print the solved puzzle
-    fprint_puzzle(stdout, puzzle, color_hints, args.color);
+    ssolve_fprint_puzzle(stdout, puzzle, color_hints, args.color);
 
     return 0;
 }
