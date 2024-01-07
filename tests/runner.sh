@@ -13,12 +13,13 @@ ACTUAL_RESULTS_FILE="${INPUT_FILE%.*}.actual"
 
 case "$INPUT_FILE" in
 */check-*)
-    if ! ./ssolve --color never --check "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
+    # Include color in the output, because it lets us test the validity checking in more detail
+    if ! ./ssolve --color always --check "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
         echo "'solve --check $INPUT_FILE' exited with non-zero status" >&2
     fi
     ;;
 *)
-    if ! ./ssolve "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
+    if ! ./ssolve --color never "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
         echo "'ssolve $INPUT_FILE' exited with non-zero status" >&2
     fi
     ;;
