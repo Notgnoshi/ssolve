@@ -1,6 +1,9 @@
 #pragma once
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+
+extern bool ssolve_verbose_g;
 
 #define SSOLVE_GRID_SIZE 9
 

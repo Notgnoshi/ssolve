@@ -6,9 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+bool ssolve_verbose_g = false;
+
 typedef struct cli_args_t
 {
-    bool verbose;
     const char* puzzle;
 } cli_args_t;
 
@@ -22,7 +23,7 @@ void usage(void)
     printf("\n");
     printf("Options:\n");
     printf("\t--help, -h     Show this help and exit\n");
-    printf("\t--verbose, -v  Increase output verbosity\n");
+    printf("\t--verbose, -v  Increase output verbosity (on stderr)\n");
 
     // TODO: Add --check that checks a sudoku.txt file for rule violations
     // TODO: Add --generate?
@@ -55,7 +56,7 @@ cli_args_t parse_args(int argc, char* argv[])
             exit(EXIT_SUCCESS);
             break;
         case 'v':
-            args.verbose = true;
+            ssolve_verbose_g = true;
             break;
         case '?':
             exit(EXIT_FAILURE);
@@ -103,7 +104,15 @@ int main(int argc, char* argv[])
         exit(EXIT_FAILURE);
     }
 
+    if (ssolve_verbose_g)
+    {
+        fprintf(stderr, "Parsed puzzle:\n");
+        fprint_puzzle(stderr, puzzle);
+    }
+
     // TODO: Solve the puzzle
+
+    // Finally, print the solved puzzle
     fprint_puzzle(stdout, puzzle);
 
     return 0;
