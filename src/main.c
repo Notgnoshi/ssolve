@@ -21,6 +21,7 @@ typedef struct ssolve_cli_args_t
 {
     ssolve_operation_t op;
     ssolve_color_when_t color;
+    ssolve_file_format_t format;
     const char* puzzle;
 } ssolve_cli_args_t;
 
@@ -35,6 +36,7 @@ void ssolve_usage(void)
     printf("Options:\n");
     printf("\t--help, -h     Show this help and exit\n");
     printf("\t--verbose, -v  Increase output verbosity (on stderr)\n");
+    printf("\t--format, -f   The input file format. One of 'grid', or 'line'\n");
     printf("\t--check, -c    Instead of solving, check the validity of the given puzzle\n");
     printf("\t--color, -C    When to color the output. 'never', 'auto', or 'always'\n");
 
@@ -48,6 +50,7 @@ ssolve_cli_args_t ssolve_parse_args(int argc, char* argv[])
     struct option options[] = {
         {"help", no_argument, NULL, 'h'},
         {"verbose", no_argument, NULL, 'v'},
+        {"format", required_argument, NULL, 'f'},
         {"check", no_argument, NULL, 'c'},
         {"color", required_argument, NULL, 'C'},
         {NULL, 0, NULL, 0},
@@ -57,7 +60,7 @@ ssolve_cli_args_t ssolve_parse_args(int argc, char* argv[])
     {
         int option_index = 0;
 
-        int retval = getopt_long(argc, argv, "hvcC:", options, &option_index);
+        int retval = getopt_long(argc, argv, "hvf:cC:", options, &option_index);
         if (retval == -1)
         {
             break;
@@ -71,6 +74,19 @@ ssolve_cli_args_t ssolve_parse_args(int argc, char* argv[])
             break;
         case 'v':
             ssolve_verbose_g = true;
+            break;
+        case 'f':
+            if (strcmp(optarg, "grid") == 0)
+            {
+                args.format = SSOLVE_FORMAT_GRID;
+            } else if (strcmp(optarg, "line") == 0)
+            {
+                args.format = SSOLVE_FORMAT_LINE;
+            } else
+            {
+                fprintf(stderr, "Unknown argument to --format: '%s'\n", optarg);
+                exit(EXIT_FAILURE);
+            }
             break;
         case 'c':
             args.op = SSOLVE_OP_CHECK;
@@ -143,7 +159,7 @@ int main(int argc, char* argv[])
 
     ssolve_puzzle_t puzzle = {0};
     ssolve_puzzle_t color_hints = {0};
-    if (false == ssolve_parse_puzzle(file, puzzle))
+    if (false == ssolve_parse_puzzle(file, args.format, puzzle))
     {
         fprintf(stderr, "Failed to parse puzzle from %s\n", args.puzzle);
         exit(EXIT_FAILURE);
