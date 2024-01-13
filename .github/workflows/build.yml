@@ -1,0 +1,40 @@
+name: Build
+on: [push]
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Install build tools
+              run: |
+                  sudo apt update
+                  sudo apt install --no-install-recommends -y \
+                    autoconf \
+                    autotools-dev \
+                    bear \
+                    build-essential \
+                    clang-format \
+                    clang-tidy \
+                    ;
+            - uses: actions/checkout@v4
+            - uses: DoozyX/clang-format-lint-action@v0.17
+              with:
+                  clangFormatVersion: 17
+            - name: Build
+              run: |
+                  autoreconf --install
+                  mkdir build/
+                  cd build/
+                  ../configure
+                  bear -- make
+            - name: Test
+              run: |
+                  cd build/
+                  bear --append -- make check VERBOSE=1 AM_COLOR_TESTS=always
+            - name: Lint
+              run: |
+                  cd build/
+                  # For whatever reason, clang-tidy fails if you explicitly pass -p ./build/, but
+                  # works, if it discovers the compile_commands.json itself. So we need to run it
+                  # from within the build directory.
+                  ../check-clang-tidy.sh
