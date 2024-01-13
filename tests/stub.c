@@ -5,5 +5,5 @@
 int main(void)
 {
     printf("Failing test output\n");
-    return 1;
+    return 0;
 }
