@@ -1,7 +1,29 @@
 #include "puzzle.h"
 
-void fprint_puzzle(FILE* file, puzzle_t puzzle)
+void ssolve_reset(FILE* file)
 {
+    fprintf(file, "\033[0m");
+}
+void ssolve_green(FILE* file)
+{
+    fprintf(file, "\033[0;32m");
+}
+void ssolve_yellow(FILE* file)
+{
+    fprintf(file, "\033[0;33m");
+}
+void ssolve_red(FILE* file)
+{
+    fprintf(file, "\033[0;31m");
+}
+
+void ssolve_fprint_puzzle(FILE* file,
+                          ssolve_puzzle_t puzzle,
+                          ssolve_puzzle_t color_hints,
+                          ssolve_color_when_t when)
+{
+    const bool color = when == SSOLVE_COLOR_ALWAYS;
+
     for (int row = 0; row < SSOLVE_GRID_SIZE; row++)
     {
         if (row != 0 && row % 3 == 0)
@@ -14,10 +36,31 @@ void fprint_puzzle(FILE* file, puzzle_t puzzle)
             {
                 fprintf(file, "| ");
             }
+            if (color && color_hints[row][col] == SSOLVE_COLOR_VALID)
+            {
+                ssolve_green(file);
+            } else if (color && color_hints[row][col] == SSOLVE_COLOR_BLANK)
+            {
+                ssolve_yellow(file);
+            } else if (color && color_hints[row][col] == SSOLVE_COLOR_INVALID)
+            {
+                ssolve_red(file);
+            }
             fprintf(file, "%u", puzzle[row][col]);
             if (col != SSOLVE_GRID_SIZE - 1)
             {
-                fprintf(file, " ");
+                if (color_hints[row][col] != SSOLVE_COLOR_INVALID)
+                {
+                    fprintf(file, " ");
+                }
+            }
+            if (color_hints[row][col] == SSOLVE_COLOR_INVALID)
+            {
+                fprintf(file, "<");
+            }
+            if (color)
+            {
+                ssolve_reset(file);
             }
             if (col == SSOLVE_GRID_SIZE - 1)
             {

@@ -18,6 +18,23 @@ extern bool ssolve_verbose_g;
 //     6 0 0 | 0 0 0 | 0 0 0
 //     7 0 0 | 0 0 0 | 0 0 0
 //     8 0 0 | 0 0 0 | 0 0 0
-typedef uint8_t puzzle_t[SSOLVE_GRID_SIZE][SSOLVE_GRID_SIZE];
+typedef uint8_t ssolve_puzzle_t[SSOLVE_GRID_SIZE][SSOLVE_GRID_SIZE];
 
-void fprint_puzzle(FILE* file, puzzle_t puzzle);
+typedef enum ssolve_color_when_t
+{
+    SSOLVE_COLOR_AUTO,  // Default
+    SSOLVE_COLOR_NEVER,
+    SSOLVE_COLOR_ALWAYS,
+} ssolve_color_when_t;
+
+typedef enum ssolve_color_hint_t
+{
+    SSOLVE_COLOR_NONE,     // no color
+    SSOLVE_COLOR_VALID,    // green
+    SSOLVE_COLOR_BLANK,    // yellow
+    SSOLVE_COLOR_INVALID,  // red
+} ssolve_color_hint_t;
+void ssolve_fprint_puzzle(FILE* file,
+                          ssolve_puzzle_t puzzle,
+                          ssolve_puzzle_t color_hints,
+                          ssolve_color_when_t when);

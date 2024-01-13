@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool skippable_line(const char* buffer, int buf_size)
+bool ssolve_skippable_line(const char* buffer, int buf_size)
 {
     for (int i = 0; i < buf_size; i++)
     {
@@ -23,9 +23,9 @@ bool skippable_line(const char* buffer, int buf_size)
     return true;
 }
 
-bool parse_line(int* row, char* buffer, int buf_size, puzzle_t puzzle)
+bool ssolve_parse_line(int* row, char* buffer, int buf_size, ssolve_puzzle_t puzzle)
 {
-    if (skippable_line(buffer, buf_size))
+    if (ssolve_skippable_line(buffer, buf_size))
     {
         return true;
     }
@@ -70,7 +70,7 @@ bool parse_line(int* row, char* buffer, int buf_size, puzzle_t puzzle)
 //     6 0 0 | 0 0 0 | 0 0 0
 //     7 0 0 | 0 0 0 | 0 0 0
 //     8 0 0 | 0 0 0 | 0 0 0
-bool parse_puzzle(FILE* file, puzzle_t puzzle)
+bool ssolve_parse_puzzle(FILE* file, ssolve_puzzle_t puzzle)
 {
     int row = 0;
 
@@ -84,7 +84,7 @@ bool parse_puzzle(FILE* file, puzzle_t puzzle)
             return false;
         }
 
-        const bool success = parse_line(&row, buffer, buf_size, puzzle);
+        const bool success = ssolve_parse_line(&row, buffer, buf_size, puzzle);
         if (false == success)
         {
             // Buffer contains a null byte, so you can't print anything after it
