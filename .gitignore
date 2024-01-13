@@ -1,6 +1,8 @@
 ssolve
 build/
 *.plist
+data/grid/
+data/line/
 
 # http://www.gnu.org/software/automake
 

@@ -15,3 +15,8 @@ TESTS = \
 	tests/cases/incomplete-row1.txt \
 	tests/cases/incomplete-row2.txt
 TESTS_ENVIRONMENT = $(srcdir)/tests/runner.sh
+
+data/grid/%.txt: data/grid.tar.gz
+	tar --directory data/ -xzvf data/grid.tar.gz
+data/line/%.txt: data/line.tar.gz
+	tar --directory data/ -xzvf data/line.tar.gz
