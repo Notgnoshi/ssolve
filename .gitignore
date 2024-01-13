@@ -3,6 +3,7 @@ build/
 *.plist
 data/grid/
 data/line/
+tests/test-*
 
 # http://www.gnu.org/software/automake
 

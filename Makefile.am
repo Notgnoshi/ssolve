@@ -5,7 +5,11 @@ ssolve_SOURCES = \
 	src/puzzle.c src/puzzle.h \
 	src/main.c
 
+check_PROGRAMS = tests/test-stub
+tests_test_stub_SOURCES = tests/stub.c
+
 TESTS = \
+	tests/test-stub \
 	tests/cases/check-empty.txt \
 	tests/cases/check-easy1.txt \
 	tests/cases/check-easy1-with-violation.txt \
@@ -14,7 +18,9 @@ TESTS = \
 	tests/cases/invalid-rows.txt \
 	tests/cases/incomplete-row1.txt \
 	tests/cases/incomplete-row2.txt
-TESTS_ENVIRONMENT = $(srcdir)/tests/runner.sh
+
+TEST_EXTENSIONS = .txt
+TXT_LOG_COMPILER = $(srcdir)/tests/runner.sh
 
 data/grid/%.txt: data/grid.tar.gz
 	tar --directory data/ -xzvf data/grid.tar.gz
