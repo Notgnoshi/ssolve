@@ -1,5 +1,6 @@
 #include "ssolve/puzzle.h"
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 bool ssolve_verbose_g = false;
 
 void ssolve_reset(FILE* file)
@@ -19,8 +20,9 @@ void ssolve_red(FILE* file)
     fprintf(file, "\033[0;31m");
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void ssolve_fprint_puzzle(FILE* file,
-                          ssolve_puzzle_t puzzle,
+                          ssolve_puzzle_t puzzle,  // NOLINT(bugprone-easily-swappable-parameters)
                           ssolve_puzzle_t color_hints,
                           ssolve_color_when_t when)
 {
