@@ -9,21 +9,23 @@ if [[ ! -f "$INPUT_FILE" ]]; then
     exit 1
 fi
 EXPECTED_RESULTS_FILE="${INPUT_FILE%.*}.expected"
+if [[ ! -f "$EXPECTED_RESULTS_FILE" ]]; then
+    echo "'$EXPECTED_RESULTS_FILE' does not exists" >&2
+    exit 1
+fi
 ACTUAL_RESULTS_FILE="${INPUT_FILE%.*}.actual"
+CLI_ARGS_FILE="${INPUT_FILE%.*}.args"
 
-case "$INPUT_FILE" in
-*/check-*)
-    # Include color in the output, because it lets us test the validity checking in more detail
-    if ! ./ssolve --color always --check "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
-        echo "'solve --check $INPUT_FILE' exited with non-zero status" >&2
-    fi
-    ;;
-*)
-    if ! ./ssolve --color never "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
-        echo "'ssolve $INPUT_FILE' exited with non-zero status" >&2
-    fi
-    ;;
-esac
+if [[ -f "$CLI_ARGS_FILE" ]]; then
+    mapfile -t <"$CLI_ARGS_FILE"
+else
+    echo "" | mapfile -t
+fi
+
+if ! ./ssolve --color always "${MAPFILE[@]}" "$INPUT_FILE" &>"$ACTUAL_RESULTS_FILE"; then
+    # Not an error, maybe the test is expected to have a non-zero status
+    echo "'ssolve' exited with non-zero status with test case '$INPUT_FILE'" >&2
+fi
 
 ssolve_cdiff() {
     # Use delta, if it's installed, because it give better diffs

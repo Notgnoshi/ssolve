@@ -1,6 +1,6 @@
-#include "check.h"
+#include "ssolve/check.h"
 
-#include "puzzle.h"
+#include "ssolve/puzzle.h"
 
 // LOL. Clang-tidy complains about a congitive complexity of 65, with a threshold of 25
 ssolve_check_result_t ssolve_check_puzzle(ssolve_puzzle_t puzzle, ssolve_puzzle_t color_hints)
