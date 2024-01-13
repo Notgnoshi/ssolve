@@ -43,6 +43,8 @@ autom4te.cache
 # https://www.gnu.org/software/libtool/
 
 /ltmain.sh
+/libtool
+.libs/
 
 # http://www.gnu.org/software/texinfo
 

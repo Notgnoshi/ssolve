@@ -1,9 +1,14 @@
+lib_LTLIBRARIES = libssolve.la
+libssolve_la_SOURCES = \
+	src/check.c include/ssolve/check.h \
+	src/parse.c include/ssolve/parse.h \
+	src/puzzle.c include/ssolve/puzzle.h
+
+AM_CFLAGS = -I$(srcdir)/include
+
 bin_PROGRAMS = ssolve
-ssolve_SOURCES = \
-	src/check.c src/check.h \
-	src/parse.c src/parse.h \
-	src/puzzle.c src/puzzle.h \
-	src/main.c
+ssolve_SOURCES = main.c
+ssolve_LDADD = libssolve.la
 
 check_PROGRAMS = tests/test-stub
 tests_test_stub_SOURCES = tests/stub.c

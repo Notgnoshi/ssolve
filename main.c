@@ -1,6 +1,6 @@
-#include "check.h"
-#include "parse.h"
-#include "puzzle.h"
+#include "ssolve/check.h"
+#include "ssolve/parse.h"
+#include "ssolve/puzzle.h"
 
 #include <getopt.h>
 #include <stdbool.h>
@@ -8,8 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
-bool ssolve_verbose_g = false;
 
 typedef enum ssolve_operation_t
 {

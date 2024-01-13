@@ -1,6 +1,7 @@
 AC_PREREQ([2.71])
 AC_INIT([ssolve],[0.1])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
+LT_INIT
 # Not portable, but all the stackoverflow links I found didn't work
 : ${CFLAGS="-g -O2 -std=c11 \
     -Wall -Wextra -Wpedantic -Wshadow -Wstrict-overflow -Wredundant-decls -Wnested-externs -Wmissing-include-dirs \

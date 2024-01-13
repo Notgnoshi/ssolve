@@ -1,4 +1,6 @@
-#include "puzzle.h"
+#include "ssolve/puzzle.h"
+
+bool ssolve_verbose_g = false;
 
 void ssolve_reset(FILE* file)
 {

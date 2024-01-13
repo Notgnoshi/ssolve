@@ -1,6 +1,6 @@
-#include "parse.h"
+#include "ssolve/parse.h"
 
-#include "puzzle.h"
+#include "ssolve/puzzle.h"
 
 #include <stdio.h>
 #include <stdlib.h>
