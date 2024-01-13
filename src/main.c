@@ -157,57 +157,68 @@ int main(int argc, char* argv[])
         }
     }
 
-    ssolve_puzzle_t puzzle = {0};
-    ssolve_puzzle_t color_hints = {0};
-    if (false == ssolve_parse_puzzle(file, args.format, puzzle))
+    int parsed_puzzles = 0;
+    while (true)
     {
-        fprintf(stderr, "Failed to parse puzzle from %s\n", args.puzzle);
-        exit(EXIT_FAILURE);
-    }
-
-    if (ssolve_verbose_g)
-    {
-        fprintf(stderr, "Parsed puzzle:\n");
-        ssolve_fprint_puzzle(stderr, puzzle, color_hints, args.color);
-    }
-
-    switch (args.op)
-    {
-    case SSOLVE_OP_SOLVE:
-    {
-        // TODO: Solve the puzzle
-
-        // Check the newly solved puzzle to set the color hints
-        if (args.color == SSOLVE_COLOR_ALWAYS)
+        ssolve_puzzle_t puzzle = {0};
+        ssolve_puzzle_t color_hints = {0};
+        const bool more_left_to_parse = ssolve_parse_puzzle(file, args.format, puzzle);
+        if (more_left_to_parse)
         {
-            ssolve_check_puzzle(puzzle, color_hints);
+            ++parsed_puzzles;
+        } else
+        {
+            // There's no more to parse. If we parsed zero puzzles, that's a failure
+            if (parsed_puzzles == 0)
+            {
+                fprintf(stderr, "Failed to parse any puzzles\n");
+                exit(EXIT_FAILURE);
+            }
+            exit(EXIT_SUCCESS);
         }
-        break;
-    }
-    case SSOLVE_OP_CHECK:
-    {
-        const ssolve_check_result_t result = ssolve_check_puzzle(puzzle, color_hints);
-        switch (result)
+
+        switch (args.op)
         {
-        case SSOLVE_CHECK_UNSOLVED:
-            fprintf(stdout, "Puzzle is unsolved:\n");
-            break;
-        case SSOLVE_CHECK_SOLVED:
-            fprintf(stdout, "Puzzle is solved:\n");
-            break;
-        case SSOLVE_CHECK_INVALID:
-            fprintf(stdout, "Puzzle is invalid:\n");
+        case SSOLVE_OP_SOLVE:
+        {
+            // TODO: Solve the puzzle
+
+            // Check the newly solved puzzle to set the color hints
+            if (args.color == SSOLVE_COLOR_ALWAYS)
+            {
+                ssolve_check_puzzle(puzzle, color_hints);
+            }
             break;
         }
-        break;
-    }
-    default:
-        fprintf(stderr, "Unsupported operation: %d\n", args.op);
-        exit(EXIT_FAILURE);
-    }
+        case SSOLVE_OP_CHECK:
+        {
+            const ssolve_check_result_t result = ssolve_check_puzzle(puzzle, color_hints);
+            switch (result)
+            {
+            case SSOLVE_CHECK_UNSOLVED:
+                fprintf(stdout, "Puzzle is unsolved:\n");
+                break;
+            case SSOLVE_CHECK_SOLVED:
+                fprintf(stdout, "Puzzle is solved:\n");
+                break;
+            case SSOLVE_CHECK_INVALID:
+                fprintf(stdout, "Puzzle is invalid:\n");
+                break;
+            }
+            break;
+        }
+        default:
+            fprintf(stderr, "Unsupported operation: %d\n", args.op);
+            exit(EXIT_FAILURE);
+        }
 
-    // Finally, print the solved puzzle
-    ssolve_fprint_puzzle(stdout, puzzle, color_hints, args.color);
+        // Finally, print the solved puzzle
+        if (parsed_puzzles > 1)
+        {
+            printf("\n");
+        }
+        ssolve_fprint_puzzle(stdout, puzzle, color_hints, args.color);
+    }
 
     return 0;
 }

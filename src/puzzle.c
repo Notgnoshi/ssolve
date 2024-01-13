@@ -22,6 +22,7 @@ void ssolve_fprint_puzzle(FILE* file,
                           ssolve_puzzle_t color_hints,
                           ssolve_color_when_t when)
 {
+    // TODO: Minimize write(2) calls by writing to a buffer, and then finally the buffer to the file
     const bool color = when == SSOLVE_COLOR_ALWAYS;
 
     for (int row = 0; row < SSOLVE_GRID_SIZE; row++)

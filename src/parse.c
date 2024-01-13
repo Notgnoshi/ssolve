@@ -6,6 +6,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+void ssolve_strip_trailing_whitespace(char* buffer, int buf_size)
+{
+    int len = 0;
+    for (; len < buf_size && buffer[len] != '\0'; ++len)
+    {
+    }
+
+    for (int i = len; i >= 0; i--)
+    {
+        if (buffer[i] == '\0' || buffer[i] == ' ' || buffer[i] == '\t' || buffer[i] == '\n')
+        {
+            buffer[i] = '\0';
+        } else
+        {
+            break;
+        }
+    }
+}
+
 bool ssolve_grid_format_valid(const char* buffer, int buf_size)
 {
     int valid_chars = 0;
@@ -63,12 +82,16 @@ bool ssolve_parse_grid_puzzle(FILE* file, ssolve_puzzle_t puzzle)
     {
         if (NULL == fgets(buffer, buf_size, file))
         {
-            fprintf(stderr, "Parsed %d rows before EOF\n", row);
             return false;
         }
+        ssolve_strip_trailing_whitespace(buffer, buf_size);
 
         // Parse lines, skipping unparseable ones, until we successfully parse a puzzle.
-        ssolve_parse_line(&row, buffer, buf_size, puzzle);
+        const bool success = ssolve_parse_line(&row, buffer, buf_size, puzzle);
+        if (success == false && ssolve_verbose_g)
+        {
+            fprintf(stderr, "Skipping invalid line: '%s'\n", buffer);
+        }
     }
 
     return true;
@@ -76,8 +99,9 @@ bool ssolve_parse_grid_puzzle(FILE* file, ssolve_puzzle_t puzzle)
 
 bool ssolve_line_format_valid(const char* buffer, int buf_size)
 {
+    const int expected_len = 81;
     int len = 0;
-    for (; len < buf_size && buffer[len] != '\0'; ++len)
+    for (; len < expected_len && len < buf_size && buffer[len] != '\0'; ++len)
     {
         // Valid characters are '.' and '0'-'9'
         if (buffer[len] != '.' && (buffer[len] < '0' || buffer[len] > '9'))
@@ -85,7 +109,6 @@ bool ssolve_line_format_valid(const char* buffer, int buf_size)
             return false;
         }
     }
-    const int expected_len = 81;
     return len == expected_len;
 }
 
@@ -94,6 +117,10 @@ bool ssolve_parse_line_whole(char* buffer, int buf_size, ssolve_puzzle_t puzzle)
     // Guarantees buffer starts with 81 valid characters
     if (ssolve_line_format_valid(buffer, buf_size) == false)
     {
+        if (ssolve_verbose_g)
+        {
+            fprintf(stderr, "Skipping invalid line: '%s'\n", buffer);
+        }
         return false;
     }
 
@@ -128,6 +155,8 @@ bool ssolve_parse_line_puzzle(FILE* file, ssolve_puzzle_t puzzle)
         {
             return false;
         }
+        ssolve_strip_trailing_whitespace(buffer, buf_size);
+
         // Skip non-parsable lines, and stop after parsing the first puzzle
         success = ssolve_parse_line_whole(buffer, buf_size, puzzle);
         if (success)

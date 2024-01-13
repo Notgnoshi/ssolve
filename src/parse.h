@@ -30,4 +30,6 @@ typedef enum ssolve_file_format_t
 
 // Parses until success, returning 'true' after the first success, or false if it hit the end of the
 // file.
+//
+// NOTE: A disadvantage of skipping lines that fail to parse is suppression of parser errors.
 bool ssolve_parse_puzzle(FILE* file, ssolve_file_format_t format, ssolve_puzzle_t puzzle);
