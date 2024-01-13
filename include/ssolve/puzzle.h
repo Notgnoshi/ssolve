@@ -3,8 +3,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 extern bool ssolve_verbose_g;
-
+// NOLINTNEXTLINE(modernize-macro-to-enum)
 #define SSOLVE_GRID_SIZE 9
 
 //     0 1 2 | 3 4 5 | 6 7 8

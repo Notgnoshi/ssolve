@@ -2,7 +2,7 @@
 
 #include "ssolve/puzzle.h"
 
-// LOL. Clang-tidy complains about a congitive complexity of 65, with a threshold of 25
+// NOLINTNEXTLINE(readability-function-cognitive-complexity, bugprone-easily-swappable-parameters)
 ssolve_check_result_t ssolve_check_puzzle(ssolve_puzzle_t puzzle, ssolve_puzzle_t color_hints)
 {
     ssolve_check_result_t retval = SSOLVE_CHECK_SOLVED;
