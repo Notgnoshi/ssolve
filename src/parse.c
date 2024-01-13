@@ -6,28 +6,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool ssolve_skippable_line(const char* buffer, int buf_size)
+bool ssolve_grid_format_valid(const char* buffer, int buf_size)
 {
-    for (int i = 0; i < buf_size; i++)
+    int valid_chars = 0;
+    for (int i = 0; i < buf_size && buffer[i] != '\0'; i++)
     {
-        if (buffer[i] == '\0')
+        if (buffer[i] == '.' || (buffer[i] >= '0' && buffer[i] <= '9'))
         {
-            break;
-        }
-        // If the line contains a number, then we should parse it
-        if (buffer[i] >= '0' && buffer[i] <= '9')
-        {
-            return false;
+            valid_chars++;
         }
     }
-    return true;
+    const int chars_per_row = 9;
+    return valid_chars == chars_per_row;
 }
 
 bool ssolve_parse_line(int* row, char* buffer, int buf_size, ssolve_puzzle_t puzzle)
 {
-    if (ssolve_skippable_line(buffer, buf_size))
+    if (ssolve_grid_format_valid(buffer, buf_size) == false)
     {
-        return true;
+        return false;
     }
 
     int col = 0;
@@ -56,20 +53,6 @@ bool ssolve_parse_line(int* row, char* buffer, int buf_size, ssolve_puzzle_t puz
     return false;
 }
 
-// The sudoku file format is a table of single-digit numbers, with non-digit numbers ignored.
-// Zeros represent blanks cells.
-//
-//     0 1 2 | 3 4 5 | 6 7 8
-//     1 0 0 | 0 0 0 | 0 0 0
-//     2 0 0 | 0 0 0 | 0 0 0
-//     ------+-------+------
-//     3 0 0 | 0 0 0 | 0 0 0
-//     4 0 0 | 0 0 0 | 0 0 0
-//     5 0 0 | 0 0 0 | 0 0 0
-//     ------+-------+------
-//     6 0 0 | 0 0 0 | 0 0 0
-//     7 0 0 | 0 0 0 | 0 0 0
-//     8 0 0 | 0 0 0 | 0 0 0
 bool ssolve_parse_grid_puzzle(FILE* file, ssolve_puzzle_t puzzle)
 {
     int row = 0;
@@ -84,13 +67,8 @@ bool ssolve_parse_grid_puzzle(FILE* file, ssolve_puzzle_t puzzle)
             return false;
         }
 
-        const bool success = ssolve_parse_line(&row, buffer, buf_size, puzzle);
-        if (false == success)
-        {
-            // Buffer contains a null byte, so you can't print anything after it
-            fprintf(stderr, "Failed to parse line: %s", buffer);
-            return false;
-        }
+        // Parse lines, skipping unparseable ones, until we successfully parse a puzzle.
+        ssolve_parse_line(&row, buffer, buf_size, puzzle);
     }
 
     return true;
