@@ -32,7 +32,7 @@ ssolve_cdiff() {
     if command -v delta &>/dev/null; then
         delta "$@"
     else
-        diff --unified --color='always' "$@"
+        command diff --unified --color='always' "$@"
     fi
 }
 
